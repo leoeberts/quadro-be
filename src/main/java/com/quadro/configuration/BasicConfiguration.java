@@ -38,8 +38,11 @@ public class BasicConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable) //TODO enable and configure
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults())
+
                 .requiresChannel((requiresChannel) ->
                                          requiresChannel.requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
                                                  .requiresSecure());
