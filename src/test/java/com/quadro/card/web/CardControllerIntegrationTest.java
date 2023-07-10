@@ -43,7 +43,7 @@ public class CardControllerIntegrationTest {
         this.repository.save(new Card("Test 2", null));
 
         this.mockMvc.perform(
-                        get("/api/cards")
+                        get("/api/v1/cards")
                                 .with(httpBasic("user", "pass"))
                 )
                 .andDo(print())
@@ -63,7 +63,7 @@ public class CardControllerIntegrationTest {
         NewCardDTO newCardDTO = NewCardDTO.builder().title("New card").description("created").build();
 
         this.mockMvc.perform(
-                        post("/api/cards")
+                        post("/api/v1/cards")
                                 .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(newCardDTO))
@@ -79,7 +79,7 @@ public class CardControllerIntegrationTest {
 
     @Test
     public void denyRequestsWithoutAuthentication() throws Exception {
-        this.mockMvc.perform(get("/api/cards"))
+        this.mockMvc.perform(get("/api/v1/cards"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
