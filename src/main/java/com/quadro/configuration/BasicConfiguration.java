@@ -39,7 +39,10 @@ public class BasicConfiguration {
                 .csrf(AbstractHttpConfigurer::disable) //TODO enable and configure
                 .authorizeHttpRequests((auth) -> auth
                         .anyRequest().authenticated())
-                .httpBasic(withDefaults());
+                .httpBasic(withDefaults())
+                .requiresChannel((requiresChannel) ->
+                                         requiresChannel.requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                                                 .requiresSecure());
         return http.build();
     }
 
