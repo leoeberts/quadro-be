@@ -1,0 +1,10 @@
+DB_USER: usr
+DB_PASS: pss
+USER_NAME: user
+USER_PASSWORD: pass
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+  jpa:
+    show-sql: true
