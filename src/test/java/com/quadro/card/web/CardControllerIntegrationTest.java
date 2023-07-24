@@ -1,7 +1,6 @@
 package com.quadro.card.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.quadro.card.domain.NewCardDTO;
 import com.quadro.card.domain.data.Card;
 import com.quadro.card.domain.data.CardRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,7 +69,7 @@ public class CardControllerIntegrationTest {
                                 .with(httpBasic("user", "pass"))
                 )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.title").value("New card"))
                 .andExpect(jsonPath("$.description").value("created"))
@@ -78,9 +77,47 @@ public class CardControllerIntegrationTest {
     }
 
     @Test
+    public void shouldValidateNewCardInformation() throws Exception {
+        validateErrorMessage(NewCardDTO.builder().build(), "Title cannot be null.");
+
+        validateErrorMessage(NewCardDTO.builder()
+                                     .title("01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567891").build(),
+                             "Title cannot be longer than 100 characters.");
+
+        validateErrorMessage(NewCardDTO.builder().title("1")
+                                     .description("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                                                          "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                                                          "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                                                          "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                                                          "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                                                          "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                                                          "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                                                          "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                                                          "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                                                          "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567891").build(),
+                             "Description cannot be longer than 1000 characters.");
+    }
+
+    @Test
     public void denyRequestsWithoutAuthentication() throws Exception {
         this.mockMvc.perform(get("/api/v1/cards"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
+    }
+
+    private void validateErrorMessage(NewCardDTO newCardDTO, String errorMessage) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        this.mockMvc.perform(
+                        post("/api/v1/cards")
+                                .with(csrf())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(newCardDTO))
+                                .with(httpBasic("user", "pass"))
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].errorMessage").value(errorMessage));
     }
 }

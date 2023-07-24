@@ -1,7 +1,6 @@
 package com.quadro.card.web;
 
 import com.quadro.card.domain.CardService;
-import com.quadro.card.domain.NewCardDTO;
 import com.quadro.card.domain.data.Card;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +44,7 @@ public class CardControllerTest {
 
         ResponseEntity<Card> result = this.controller.create(newCard);
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         verify(this.service, times(1)).createCard(newCard);
     }
 }

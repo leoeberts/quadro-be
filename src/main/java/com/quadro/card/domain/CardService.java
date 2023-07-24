@@ -20,7 +20,7 @@ public class CardService {
         return this.repository.findAll();
     }
 
-    public Card createCard(NewCardDTO newCard) {
+    public Card createCard(NewCard newCard) {
         return this.repository.save(new Card(newCard.getTitle(), newCard.getDescription()));
     }
 }

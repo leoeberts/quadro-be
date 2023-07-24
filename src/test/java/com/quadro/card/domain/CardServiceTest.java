@@ -2,6 +2,7 @@ package com.quadro.card.domain;
 
 import com.quadro.card.domain.data.Card;
 import com.quadro.card.domain.data.CardRepository;
+import com.quadro.card.web.NewCardDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
