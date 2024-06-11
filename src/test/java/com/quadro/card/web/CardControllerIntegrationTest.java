@@ -13,8 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,10 +40,7 @@ public class CardControllerIntegrationTest {
         this.repository.save(new Card("Test 1", "Test"));
         this.repository.save(new Card("Test 2", null));
 
-        this.mockMvc.perform(
-                        get("/api/v1/cards")
-                                .with(httpBasic("user", "pass"))
-                )
+        this.mockMvc.perform(get("/api/v1/cards").with(jwt()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON))
@@ -64,9 +60,9 @@ public class CardControllerIntegrationTest {
         this.mockMvc.perform(
                         post("/api/v1/cards")
                                 .with(csrf())
+                                .with(jwt())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(newCardDTO))
-                                .with(httpBasic("user", "pass"))
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -111,9 +107,9 @@ public class CardControllerIntegrationTest {
         this.mockMvc.perform(
                         post("/api/v1/cards")
                                 .with(csrf())
+                                .with(jwt())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(newCardDTO))
-                                .with(httpBasic("user", "pass"))
                 )
                 .andDo(print())
                 .andExpect(status().isBadRequest())

@@ -6,8 +6,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +22,12 @@ public class CardController {
     }
 
     @GetMapping //TODO replace with 'get all board cards'
-    public ResponseEntity<List<Card>> getAll(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<List<Card>> getAll() {
         return new ResponseEntity<>(this.service.getAllCards(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Card> create(@RequestBody @Valid NewCardDTO newCard, @AuthenticationPrincipal Jwt jwt) {
-        System.out.println(jwt.getSubject());
+    public ResponseEntity<Card> create(@RequestBody @Valid NewCardDTO newCard) {
         return new ResponseEntity<>(this.service.createCard(newCard), HttpStatus.CREATED);
     }
 

@@ -2,6 +2,8 @@ DB_USER: usr
 DB_PASS: pss
 USER_NAME: user
 USER_PASSWORD: pass
+CLIENT_ID: fakeid
+CLIENT_SECRET: fakesecret
 
 spring:
   datasource:
