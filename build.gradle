@@ -36,8 +36,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+    implementation 'io.mzlnk.oauth2.exchange:oauth2-exchange-spring-boot-starter:0.1.1'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
